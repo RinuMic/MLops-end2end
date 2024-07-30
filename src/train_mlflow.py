@@ -1,3 +1,6 @@
+"""
+Module docstring for train_mlflow.py.
+"""
 # src/train.py
 
 import os
@@ -14,8 +17,8 @@ from model import create_model
 
 def objective(trial):
     # Load and split the data
-    X, y = load_data('../data/diabetes.csv')
-    x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    x, y = load_data('../data/diabetes.csv')
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
     # Scale features
     x_train_scaled, x_test_scaled = scale_features(x_train, x_test)
     # Create a model with hyperparameters suggested by the trial
@@ -52,10 +55,10 @@ def train_and_evaluate():
         mlflow.log_params(trial.params)
         mlflow.log_metric("best_accuracy", trial.value)
         # Retrain the best model on the entire dataset
-        X, y = load_data('../data/diabetes.csv')
-        X_scaled, _, scaler = scale_features(X, X, return_scaler=True)  # Scale features on the entire dataset
+        x, y = load_data('../data/diabetes.csv')
+        x_scaled, _, scaler = scale_features(x, x, return_scaler=True)  # Scale features on the entire dataset
         model = create_model(trial)
-        model.fit(X_scaled, y)
+        model.fit(x_scaled, y)
         # Save the scaler and model
         os.makedirs('../models', exist_ok=True)
         # Save the scaler
@@ -70,7 +73,7 @@ def train_and_evaluate():
         mlflow.log_artifact(model_path, "artifacts")
         print(f'Model and scaler saved to {model_path}')
         # Plot and save confusion matrix
-        x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        _, x_test, _, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
         x_test_scaled, _ = scale_features(x_test, x_test)  # Scale features for test set
         predictions = model.predict(x_test_scaled)
         cm = confusion_matrix(y_test, predictions)

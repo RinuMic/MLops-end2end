@@ -76,6 +76,9 @@ def test_mlflow_artifacts():
 # tests/test_train2.py
 
 def test_model_reloading():
+    """
+    TEsting model reloading.
+    """
     model_path = '../models/model.pkl'
     with open(model_path, 'rb') as f:
         model = pickle.load(f)

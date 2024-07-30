@@ -18,12 +18,12 @@ app = Flask(__name__)
 swagger = Swagger(app)
 
 # Load the trained model
-model_path = '../models/model.pkl'
-if os.path.exists(model_path):
-    with open(model_path, 'rb') as f:
+MODEL_PATH = '../models/model.pkl'
+if os.path.exists(MODEL_PATH):
+    with open(MODEL_PATH, 'rb') as f:
         model = pickle.load(f)
 else:
-    raise FileNotFoundError(f'Model file not found: {model_path}')
+    raise FileNotFoundError(f'Model file not found: {MODEL_PATH}')
 
 # Initialize scaler and PCA (assuming you saved the scaler and PCA during training)
 with open('../models/scaler.pkl', 'rb') as f:
