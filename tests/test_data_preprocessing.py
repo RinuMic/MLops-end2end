@@ -15,7 +15,6 @@ import sys
 import pytest
 import pandas as pd
 import numpy as np
-from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from data_processing import load_data, split_data, scale_features
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
@@ -45,9 +44,9 @@ def test_load_data(sample_data):
     Verifies that features and target are correctly extracted and engineered.
     Ensures the presence of all expected features in the dataset.
     """
-    X, y = load_data(sample_data)
+    x, y = load_data(sample_data)
     # Check the shape of X and y
-    assert X.shape == (5, 13), "Feature shape mismatch"
+    assert x.shape == (5, 13), "Feature shape mismatch"
     assert y.shape == (5,), "Target shape mismatch"
     # List of expected feature columns
     expected_features = [
@@ -56,23 +55,23 @@ def test_load_data(sample_data):
         'BMI*Age', 'Glucose*Insulin', 'Glucose^2',
         'BMI^2', 'LogInsulin'
     ]
-    # Verify that each expected feature is present in X.columns
+    # Verify that each expected feature is present in x.columns
     for feature in expected_features:
-        assert feature in X.columns, f"Feature '{feature}' not found"
+        assert feature in x.columns, f"Feature '{feature}' not found"
     # Optionally, check for the presence of some features to ensure they're generated
-    assert 'Pregnancies' in X.columns, "Feature 'Pregnancies' not found"
-    assert 'Glucose' in X.columns, "Feature 'Glucose' not found"
-    assert 'BloodPressure' in X.columns, "Feature 'BloodPressure' not found"
-    assert 'SkinThickness' in X.columns, "Feature 'SkinThickness' not found"
-    assert 'Insulin' in X.columns, "Feature 'Insulin' not found"
-    assert 'BMI' in X.columns, "Feature 'BMI' not found"
-    assert 'DiabetesPedigreeFunction' in X.columns, "Feature 'DiabetesPedigreeFunction' not found"
-    assert 'Age' in X.columns, "Feature 'Age' not found"
-    assert 'BMI*Age' in X.columns, "Feature 'BMI*Age' not found"
-    assert 'Glucose*Insulin' in X.columns, "Feature 'Glucose*Insulin' not found"
-    assert 'Glucose^2' in X.columns, "Feature 'Glucose^2' not found"
-    assert 'BMI^2' in X.columns, "Feature 'BMI^2' not found"
-    assert 'LogInsulin' in X.columns, "Feature 'LogInsulin' not found"
+    assert 'Pregnancies' in x.columns, "Feature 'Pregnancies' not found"
+    assert 'Glucose' in x.columns, "Feature 'Glucose' not found"
+    assert 'BloodPressure' in x.columns, "Feature 'BloodPressure' not found"
+    assert 'SkinThickness' in x.columns, "Feature 'SkinThickness' not found"
+    assert 'Insulin' in x.columns, "Feature 'Insulin' not found"
+    assert 'BMI' in x.columns, "Feature 'BMI' not found"
+    assert 'DiabetesPedigreeFunction' in x.columns, "Feature 'DiabetesPedigreeFunction' not found"
+    assert 'Age' in x.columns, "Feature 'Age' not found"
+    assert 'BMI*Age' in x.columns, "Feature 'BMI*Age' not found"
+    assert 'Glucose*Insulin' in x.columns, "Feature 'Glucose*Insulin' not found"
+    assert 'Glucose^2' in x.columns, "Feature 'Glucose^2' not found"
+    assert 'BMI^2' in x.columns, "Feature 'BMI^2' not found"
+    assert 'LogInsulin' in x.columns, "Feature 'LogInsulin' not found"
 
 def test_split_data(sample_data):
     """Test the split_data function.
@@ -81,7 +80,7 @@ def test_split_data(sample_data):
     and checks that neither set is empty and the total length matches the original dataset.
     """
     X, y = load_data(sample_data)
-    x_train, x_test, y_train, y_test = split_data(X, y)
+    x_train, x_test, _, _ = split_data(X, y)
     assert len(x_train) > 0, "Training set is empty"
     assert len(x_test) > 0, "Testing set is empty"
     assert len(x_train) + len(x_test) == len(X), "Data splitting mismatch"
@@ -92,8 +91,8 @@ def test_scale_features(sample_data):
     Verifies that the features are scaled correctly using StandardScaler,
     and checks if the scaling transforms the features to have a mean close to 0 and std close to 1.
     """
-    X, y = load_data(sample_data)
-    x_train, x_test, scaler = scale_features(X, None, return_scaler=True)
+    X, _ = load_data(sample_data)
+    x_train, _, scaler = scale_features(X, None, return_scaler=True)
     assert isinstance(scaler, StandardScaler), "Scaler was not returned correctly"
     # Check if scaling transformed the features (mean close to 0 and std close to 1)
     assert np.allclose(x_train.mean(axis=0), 0, atol=1e-2), "Scaled features' mean is not close to 0"

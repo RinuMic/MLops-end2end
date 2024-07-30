@@ -14,14 +14,14 @@ cover various models including:
 
 import os
 import sys
-import pytest
 from unittest.mock import MagicMock
+import pytest
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 from model import create_model
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 
 def test_create_model_random_forest():
     """Test model creation for RandomForestClassifier."""
@@ -77,4 +77,3 @@ def test_create_model_decision_tree():
 
 if __name__ == '__main__':
     pytest.main()
-

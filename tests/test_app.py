@@ -21,10 +21,36 @@ import sys
 import json
 import pytest
 from flask_testing import TestCase
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 from app import app
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 
 class AppTestCase(TestCase):
+    """
+    Unit tests for the Flask application.
+
+    This class contains tests for the `/predict` endpoint of the Flask application using the 
+    Flask-Testing library. It includes tests for various scenarios to ensure the robustness of 
+    the API, including handling of valid and invalid input data.
+
+    The tests cover the following scenarios:
+    - Valid input: Ensures the `/predict` endpoint responds correctly with valid input data.
+    - Missing `features` key: Checks that the `/predict` endpoint returns an error when the 
+      `features` key is missing from the request.
+    - Invalid length of `features` list: Verifies that the `/predict` endpoint returns an error 
+      when the length of the `features` list is not equal to 8.
+    - Invalid data type for `features`: Validates that the `/predict` endpoint returns an error 
+      when the `features` value is not a list of numbers.
+
+    Methods:
+        - create_app: Sets up the Flask application for testing.
+        - test_predict_valid_input: Tests the `/predict` endpoint with valid input data.
+        - test_predict_missing_features: Tests the `/predict` endpoint when the `features` key 
+          is missing from the request.
+        - test_predict_invalid_features_length: Tests the `/predict` endpoint with an invalid 
+          number of features.
+        - test_predict_invalid_features_data_type: Tests the `/predict` endpoint with an invalid 
+          data type for features.
+    """
     def create_app(self):
         """Set up the Flask application for testing."""
         app.config['TESTING'] = True

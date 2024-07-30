@@ -16,16 +16,15 @@ dataset is located in '../data'.
 import os
 import sys
 import pickle
-import pytest
 from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
+from sklearn.metrics import accuracy_score
+from data_processing import load_data, scale_features
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
-from data_processing import load_data, split_data, scale_features
 
 def test_train_and_evaluate():
     # Load the saved model
@@ -48,19 +47,17 @@ def test_train_and_evaluate():
             break
     assert found_match, "Saved model is not a recognized classifier type"
 
-
 def test_model_accuracy():
     # Load the best model and evaluate its accuracy
     model_path = '../models/model.pkl'
     with open(model_path, 'rb') as f:
         model = pickle.load(f)
     x, y = load_data('../data/diabetes.csv')
-    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
+    _, x_test, _, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
     x_test_scaled, _ = scale_features(x_test, x_test)
     predictions = model.predict(x_test_scaled)
     accuracy = accuracy_score(y_test, predictions)
     assert accuracy > 0.6, "Model accuracy is too low"
-    
 # tests/test_train2.py
 
 def test_mlflow_artifacts():
@@ -83,7 +80,7 @@ def test_model_reloading():
     with open(model_path, 'rb') as f:
         model = pickle.load(f)
     # Check if the model can make predictions
-    X, _ = load_data('../data/diabetes.csv')
-    X_scaled, _ = scale_features(X, X)
-    predictions = model.predict(X_scaled)
-    assert len(predictions) == X.shape[0], "Model predictions length mismatch"
+    x, _ = load_data('../data/diabetes.csv')
+    x_scaled, _ = scale_features(x, x)
+    predictions = model.predict(x_scaled)
+    assert len(predictions) == x.shape[0], "Model predictions length mismatch"
