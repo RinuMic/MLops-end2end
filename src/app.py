@@ -40,7 +40,6 @@ def feature_engineering(data):
     data['Glucose^2'] = data['Glucose'] ** 2
     data['BMI^2'] = data['BMI'] ** 2
     data['LogInsulin'] = np.log1p(data['Insulin'])
-    
     return data
 
 @app.route('/predict', methods=['POST'])
@@ -100,9 +99,7 @@ def predict():
     # Extract features for prediction
     features_array = features_df.values
     # Apply the same scaling and PCA as during training
-    features_scaled = scaler.transform(features_array)  # Assuming you fit the scaler during training
-    # features_pca = pca.transform(features_scaled)  # Assuming you fit the PCA during training
-    
+    features_scaled = scaler.transform(features_array)
     # Make prediction
     prediction = model.predict(features_scaled)
     # prediction = model.predict(features)

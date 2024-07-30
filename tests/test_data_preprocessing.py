@@ -1,3 +1,13 @@
+"""
+Unit tests for data processing functions.
+
+This module contains tests for the functions in the `data_processing` module, including:
+- `load_data`: Verifies correct loading and feature engineering from the dataset.
+- `split_data`: Checks the splitting of the dataset into training and testing sets.
+- `scale_features`: Ensures that features are scaled correctly using StandardScaler.
+
+The module also includes tests for handling missing values in the dataset.
+"""
 # tests/test_data_processing.py
 
 import os
@@ -7,8 +17,8 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 from data_processing import load_data, split_data, scale_features
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 
 @pytest.fixture(scope="module")
 def sample_data():
@@ -30,12 +40,15 @@ def sample_data():
     return '../data/sample_diabetes.csv'
 
 def test_load_data(sample_data):
+    """Test the load_data function.
+
+    Verifies that features and target are correctly extracted and engineered.
+    Ensures the presence of all expected features in the dataset.
+    """
     X, y = load_data(sample_data)
-    
     # Check the shape of X and y
     assert X.shape == (5, 13), "Feature shape mismatch"
     assert y.shape == (5,), "Target shape mismatch"
-    
     # List of expected feature columns
     expected_features = [
         'Pregnancies', 'Glucose', 'BloodPressure', 'SkinThickness',
@@ -43,11 +56,9 @@ def test_load_data(sample_data):
         'BMI*Age', 'Glucose*Insulin', 'Glucose^2',
         'BMI^2', 'LogInsulin'
     ]
-    
     # Verify that each expected feature is present in X.columns
     for feature in expected_features:
         assert feature in X.columns, f"Feature '{feature}' not found"
-    
     # Optionally, check for the presence of some features to ensure they're generated
     assert 'Pregnancies' in X.columns, "Feature 'Pregnancies' not found"
     assert 'Glucose' in X.columns, "Feature 'Glucose' not found"
@@ -63,30 +74,41 @@ def test_load_data(sample_data):
     assert 'BMI^2' in X.columns, "Feature 'BMI^2' not found"
     assert 'LogInsulin' in X.columns, "Feature 'LogInsulin' not found"
 
-
-
 def test_split_data(sample_data):
+    """Test the split_data function.
+
+    Verifies that the data is split correctly into training and testing sets,
+    and checks that neither set is empty and the total length matches the original dataset.
+    """
     X, y = load_data(sample_data)
-    X_train, X_test, y_train, y_test = split_data(X, y)
-    assert len(X_train) > 0, "Training set is empty"
-    assert len(X_test) > 0, "Testing set is empty"
-    assert len(X_train) + len(X_test) == len(X), "Data splitting mismatch"
+    x_train, x_test, y_train, y_test = split_data(X, y)
+    assert len(x_train) > 0, "Training set is empty"
+    assert len(x_test) > 0, "Testing set is empty"
+    assert len(x_train) + len(x_test) == len(X), "Data splitting mismatch"
 
 def test_scale_features(sample_data):
+    """Test the scale_features function.
+
+    Verifies that the features are scaled correctly using StandardScaler,
+    and checks if the scaling transforms the features to have a mean close to 0 and std close to 1.
+    """
     X, y = load_data(sample_data)
-    X_train, X_test, scaler = scale_features(X, None, return_scaler=True)
+    x_train, x_test, scaler = scale_features(X, None, return_scaler=True)
     assert isinstance(scaler, StandardScaler), "Scaler was not returned correctly"
-    
     # Check if scaling transformed the features (mean close to 0 and std close to 1)
-    assert np.allclose(X_train.mean(axis=0), 0, atol=1e-2), "Scaled features' mean is not close to 0"
-    assert np.allclose(X_train.std(axis=0), 1, atol=1e-2), "Scaled features' std is not close to 1"
+    assert np.allclose(x_train.mean(axis=0), 0, atol=1e-2), "Scaled features' mean is not close to 0"
+    assert np.allclose(x_train.std(axis=0), 1, atol=1e-2), "Scaled features' std is not close to 1"
 
 def test_load_data_missing_values(sample_data):
+    """Test load_data function's handling of missing values.
+
+    Modifies the sample data to include NaN values, then verifies that missing values
+    are correctly imputed and no NaNs are present in the dataset.
+    """
     # Modify the sample data to include NaN values for testing
     df = pd.read_csv(sample_data)
     df.loc[0, 'BMI'] = np.nan
     df.to_csv(sample_data, index=False)
-    
     X, y = load_data(sample_data)
     assert X['BMI'].isna().sum() == 0, "Missing values in 'BMI' column after imputation"
 

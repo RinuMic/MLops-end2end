@@ -1,15 +1,32 @@
+"""
+Unit tests for the Flask application.
+
+This module contains tests for the `/predict` endpoint of the Flask application using the 
+Flask-Testing library. It includes tests for various scenarios including valid input, missing 
+features, invalid features length, and invalid data types.
+
+The tests are organized into the following cases:
+- `test_predict_valid_input`: Verifies that the `/predict` endpoint responds correctly to 
+  valid input data.
+- `test_predict_missing_features`: Verifies that the `/predict` endpoint returns an error 
+  when the `features` key is missing in the request.
+- `test_predict_invalid_features_length`: Verifies that the `/predict` endpoint returns an 
+  error when the length of the `features` list is not 8.
+- `test_predict_invalid_features_data_type`: Verifies that the `/predict` endpoint returns 
+  an error when the `features` value is not a list of numbers.
+"""
+
 import os
 import sys
-import pytest
 import json
-from flask import Flask
+import pytest
 from flask_testing import TestCase
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 from app import app
 
 class AppTestCase(TestCase):
     def create_app(self):
-        # Set up your Flask application for testing
+        """Set up the Flask application for testing."""
         app.config['TESTING'] = True
         return app
 
@@ -45,4 +62,3 @@ class AppTestCase(TestCase):
 
 if __name__ == '__main__':
     pytest.main()
-

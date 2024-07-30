@@ -1,20 +1,8 @@
-# # src/data_processing.py
-
-# import pandas as pd
-# from sklearn.model_selection import train_test_split
-
-# def load_data(file_path):
-#     """Load the dataset and split it into features and target."""
-#     data = pd.read_csv(file_path)
-#     X = data.drop('Outcome', axis=1)
-#     y = data['Outcome']
-#     return X, y
-
-# def split_data(X, y, test_size=0.2, random_state=42):
-#     """Split the data into training and testing sets."""
-#     return train_test_split(X, y, test_size=test_size, random_state=random_state)
-
-
+"""
+This module provides functions for data processing tasks including loading data, 
+splitting the dataset, and scaling features. It is designed to handle data pre-processing
+steps required for machine learning tasks.
+"""
 # src/data_processing.py
 
 import pandas as pd
@@ -34,24 +22,24 @@ def load_data(file_path):
     data['Glucose^2'] = data['Glucose'] ** 2
     data['BMI^2'] = data['BMI'] ** 2
     data['LogInsulin'] = np.log1p(data['Insulin'])
-    X = data.drop('Outcome', axis=1)
+    x = data.drop('Outcome', axis=1)
     y = data['Outcome']
-    return X, y
+    return x, y
 
-def split_data(X, y, test_size=0.2, random_state=42):
+def split_data(x, y, test_size=0.2, random_state=42):
     """Split the data into training and testing sets."""
-    return train_test_split(X, y, test_size=test_size, random_state=random_state)
+    return train_test_split(x, y, test_size=test_size, random_state=random_state)
 
-def scale_features(X_train, X_test, return_scaler=False):
+def scale_features(x_train, x_test, return_scaler=False):
     """Scale features using StandardScaler."""
     scaler = StandardScaler()
-    X_train_scaled = scaler.fit_transform(X_train)
-    if X_test is not None:
-        X_test_scaled = scaler.transform(X_test)
+    x_train_scaled = scaler.fit_transform(x_train)
+    if x_test is not None:
+        x_test_scaled = scaler.transform(x_test)
     else:
-        X_test_scaled = None
+        x_test_scaled = None
 
     if return_scaler:
-        return X_train_scaled, X_test_scaled, scaler
+        return x_train_scaled, x_test_scaled, scaler
     else:
-        return X_train_scaled, X_test_scaled
+        return x_train_scaled, x_test_scaled

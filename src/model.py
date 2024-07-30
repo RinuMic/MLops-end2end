@@ -1,3 +1,8 @@
+"""
+This module provides a function to create machine learning models based on hyperparameter
+suggestions from an Optuna trial. It includes support for various classifiers such as 
+RandomForest, GradientBoosting, LogisticRegression, SVC, and DecisionTree.
+"""
 # src/model.py
 
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
@@ -16,23 +21,19 @@ def create_model(trial):
         n_estimators = trial.suggest_int('n_estimators', 50, 300)
         max_depth = trial.suggest_int('max_depth', 2, 30)
         model = RandomForestClassifier(n_estimators=n_estimators, max_depth=max_depth, random_state=42)
-        
     elif classifier_name == 'GradientBoosting':
         n_estimators = trial.suggest_int('n_estimators', 50, 300)
         learning_rate = trial.suggest_float('learning_rate', 0.01, 0.3)
         max_depth = trial.suggest_int('max_depth', 2, 10)
         model = GradientBoostingClassifier(n_estimators=n_estimators, learning_rate=learning_rate, max_depth=max_depth, random_state=42)
-
     elif classifier_name == 'LogisticRegression':
         C = trial.suggest_float('C', 0.01, 10.0, log=True)
         solver = trial.suggest_categorical('solver', ['liblinear', 'lbfgs'])
         model = LogisticRegression(C=C, solver=solver, max_iter=1000, random_state=42)
-
     elif classifier_name == 'SVC':
         C = trial.suggest_float('C', 0.1, 10.0, log=True)
         kernel = trial.suggest_categorical('kernel', ['linear', 'rbf', 'poly'])
         model = SVC(C=C, kernel=kernel, probability=True, random_state=42)
-
     elif classifier_name == 'DecisionTree':
         max_depth = trial.suggest_int('max_depth', 2, 30)
         min_samples_split = trial.suggest_int('min_samples_split', 2, 20)
