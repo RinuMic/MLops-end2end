@@ -30,9 +30,9 @@ jobs:
         pip install -r requirements.txt
 
     - name: Lint code
-        run: |
-          pip install pylint
-          pylint **/*.py --fail-under 5 --fail-on E
+      run: |
+        source bits_env/bin/activate
+        pylint **/*.py --fail-under 5 --fail-on E
 
     - name: Run Tests
       run: |
