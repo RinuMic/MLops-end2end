@@ -1,26 +1,3 @@
-# # app.py
-
-# import pickle
-# import numpy as np
-# from flask import Flask, request, jsonify
-
-# app = Flask(__name__)
-
-# # Load the trained model
-# with open('../models/model.pkl', 'rb') as f:
-#     model = pickle.load(f)
-
-# @app.route('/predict', methods=['POST'])
-# def predict():
-#     data = request.get_json(force=True)
-#     features = np.array(data['features']).reshape(1, -1)
-#     prediction = model.predict(features)
-#     return jsonify({'prediction': int(prediction[0])})
-
-# if __name__ == '__main__':
-#     app.run(host='0.0.0.0', port=5000)
-
-
 # src/app.py
 
 import os
@@ -105,9 +82,12 @@ def feature_engineering(data):
 def predict():
     """Predict diabetes from input features"""
     data = request.get_json(force=True)
-    # features = np.array(data['features']).reshape(1, -1)
-    features = np.array(data['features'])
-
+    
+    if 'features' not in data:
+        return jsonify({'error': 'Missing features key'}), 400
+    
+    features = data['features']
+    
     if len(features) != 8:
         return jsonify({'error': 'Expecting 8 features'}), 400
     
