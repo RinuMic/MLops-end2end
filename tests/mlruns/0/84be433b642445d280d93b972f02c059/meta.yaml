@@ -1,0 +1,15 @@
+artifact_uri: file:///home/a1295154/Documents/PROJECTS/BITS/MLOps-Assignment1-Group41/tests/mlruns/0/84be433b642445d280d93b972f02c059/artifacts
+end_time: 1722341123052
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 84be433b642445d280d93b972f02c059
+run_name: flawless-robin-28
+run_uuid: 84be433b642445d280d93b972f02c059
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1722341118642
+status: 3
+tags: []
+user_id: a1295154

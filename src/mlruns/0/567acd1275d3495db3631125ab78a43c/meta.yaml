@@ -1,0 +1,15 @@
+artifact_uri: file:///home/a1295154/Documents/PROJECTS/BITS/MLOps-Assignment1-Group41/src/mlruns/0/567acd1275d3495db3631125ab78a43c/artifacts
+end_time: 1722339605454
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 567acd1275d3495db3631125ab78a43c
+run_name: angry-bass-358
+run_uuid: 567acd1275d3495db3631125ab78a43c
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1722339600990
+status: 3
+tags: []
+user_id: a1295154
