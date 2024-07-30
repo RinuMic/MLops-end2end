@@ -31,7 +31,7 @@ jobs:
 
     - name: Lint code
       run: |
-        pip install pylint
+        source bits_env/bin/activate
         pylint **/*.py --fail-under 5 --fail-on E
 
     - name: Run Tests
