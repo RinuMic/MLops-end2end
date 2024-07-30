@@ -1,3 +1,7 @@
+"""
+This module initializes the Flask application and sets up the prediction endpoint.
+"""
+
 # src/app.py
 
 import os
@@ -30,7 +34,6 @@ def feature_engineering(data):
     # Handle missing values: Assume missing values represented by zero
     # data = data.replace(0, np.nan)
     data.fillna(data.mean(), inplace=True)
-    
     # Feature Engineering
     data['BMI*Age'] = data['BMI'] * data['Age']  # Interaction feature
     data['Glucose*Insulin'] = data['Glucose'] * data['Insulin']
@@ -82,27 +85,20 @@ def feature_engineering(data):
 def predict():
     """Predict diabetes from input features"""
     data = request.get_json(force=True)
-    
     if 'features' not in data:
         return jsonify({'error': 'Missing features key'}), 400
-    
     features = data['features']
-    
     if len(features) != 8:
         return jsonify({'error': 'Expecting 8 features'}), 400
-    
     # Convert to DataFrame
     features_df = pd.DataFrame([features], columns=[
         'Pregnancies', 'Glucose', 'BloodPressure', 'SkinThickness',
         'Insulin', 'BMI', 'DiabetesPedigreeFunction', 'Age'
     ])
-    
     # Apply feature engineering
     features_df = feature_engineering(features_df)
-    
     # Extract features for prediction
     features_array = features_df.values
-
     # Apply the same scaling and PCA as during training
     features_scaled = scaler.transform(features_array)  # Assuming you fit the scaler during training
     # features_pca = pca.transform(features_scaled)  # Assuming you fit the PCA during training
