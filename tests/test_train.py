@@ -14,6 +14,7 @@ dataset is located in '../data'.
 # tests/test_train2.py
 
 import os
+import subprocess
 import sys
 import pickle
 from sklearn.preprocessing import StandardScaler
@@ -25,6 +26,12 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 from data_processing import load_data, scale_features
+
+# DVC command to pull the data
+try:
+    subprocess.run(['dvc', 'pull', 'data/diabetes.csv.dvc'], check=True)
+except subprocess.CalledProcessError:
+    raise RuntimeError("Failed to pull data using DVC")
 
 data_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../data'))
 data_path = os.path.join(data_dir, 'diabetes.csv')
@@ -42,6 +49,10 @@ if os.path.exists(MODEL_PATH):
         model = pickle.load(f)
 else:
     raise FileNotFoundError(f'Model file not found: {MODEL_PATH}')
+
+print('###########################:', data_path)
+print('#############################:',MODEL_PATH)
+print('#############################:',SCALER_PATH)
 
 # Load the scaler
 if os.path.exists(SCALER_PATH):
