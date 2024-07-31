@@ -36,5 +36,10 @@ jobs:
     - name: Push Docker Image
       run: |
         docker buildx build -t ${{ secrets.DOCKERHUB_USERNAME }}/pima-indians-mlops:latest --push .
+
+    - name: Log Docker Info
+      run: docker info
     
+    - name: List Docker Images
+      run: docker images
     
