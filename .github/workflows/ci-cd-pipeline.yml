@@ -42,6 +42,7 @@ jobs:
     - name: Train Model
       run: |
         source bits_env/bin/activate
+        export PYTHONPATH=$(pwd)/src
         python src/train.py
 
     - name: Docker Build and Push
