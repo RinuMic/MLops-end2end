@@ -26,10 +26,35 @@ from sklearn.metrics import accuracy_score
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 from data_processing import load_data, scale_features
 
+data_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../data'))
+data_path = os.path.join(data_dir, 'diabetes.csv')
+
+# Get the absolute path to the models directory
+MODELS_DIR = os.path.join(os.path.dirname(__file__), '../models')
+
+# Define the paths to your model and scaler files
+MODEL_PATH = os.path.join(MODELS_DIR, 'model.pkl')
+SCALER_PATH = os.path.join(MODELS_DIR, 'scaler.pkl')
+
+# MODEL_PATH = '../models/model.pkl'
+if os.path.exists(MODEL_PATH):
+    with open(MODEL_PATH, 'rb') as f:
+        model = pickle.load(f)
+else:
+    raise FileNotFoundError(f'Model file not found: {MODEL_PATH}')
+
+# Load the scaler
+if os.path.exists(SCALER_PATH):
+    with open(SCALER_PATH, 'rb') as f:
+        scaler = pickle.load(f)
+else:
+    raise FileNotFoundError(f'Scaler file not found: {SCALER_PATH}')
+
+
 def test_train_and_evaluate():
     # Load the saved model
-    model_path = '../models/model.pkl'
-    with open(model_path, 'rb') as f:
+    # model_path = '../models/model.pkl'
+    with open(MODEL_PATH, 'rb') as f:
         model = pickle.load(f)
     # Define the expected classifier types
     classifier_types = {
@@ -49,10 +74,10 @@ def test_train_and_evaluate():
 
 def test_model_accuracy():
     # Load the best model and evaluate its accuracy
-    model_path = '../models/model.pkl'
-    with open(model_path, 'rb') as f:
+    # model_path = '../models/model.pkl'
+    with open(MODEL_PATH, 'rb') as f:
         model = pickle.load(f)
-    x, y = load_data('../data/diabetes.csv')
+    x, y = load_data(data_path)
     _, x_test, _, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
     x_test_scaled, _ = scale_features(x_test, x_test)
     predictions = model.predict(x_test_scaled)
@@ -62,14 +87,14 @@ def test_model_accuracy():
 
 def test_mlflow_artifacts():
     # Check if the scaler and model files exist
-    scaler_path = '../models/scaler.pkl'
-    model_path = '../models/model.pkl'
-    assert os.path.exists(scaler_path), "Scaler artifact not found"
-    assert os.path.exists(model_path), "Model artifact not found"
+    # scaler_path = '../models/scaler.pkl'
+    # model_path = '../models/model.pkl'
+    assert os.path.exists(SCALER_PATH), "Scaler artifact not found"
+    assert os.path.exists(MODEL_PATH), "Model artifact not found"
     # Load and check the scaler and model
-    with open(scaler_path, 'rb') as f:
+    with open(SCALER_PATH, 'rb') as f:
         scaler = pickle.load(f)
-    with open(model_path, 'rb') as f:
+    with open(MODEL_PATH, 'rb') as f:
         model = pickle.load(f)
     assert isinstance(scaler, StandardScaler), "Scaler type mismatch"
     assert isinstance(model, (RandomForestClassifier, GradientBoostingClassifier, LogisticRegression, SVC, DecisionTreeClassifier)), "Model type mismatch"
@@ -79,11 +104,11 @@ def test_model_reloading():
     """
     TEsting model reloading.
     """
-    model_path = '../models/model.pkl'
-    with open(model_path, 'rb') as f:
+    # model_path = '../models/model.pkl'
+    with open(MODEL_PATH, 'rb') as f:
         model = pickle.load(f)
     # Check if the model can make predictions
-    x, _ = load_data('../data/diabetes.csv')
+    x, _ = load_data(data_path)
     x_scaled, _ = scale_features(x, x)
     predictions = model.predict(x_scaled)
     assert len(predictions) == x.shape[0], "Model predictions length mismatch"
