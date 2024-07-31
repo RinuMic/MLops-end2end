@@ -21,8 +21,8 @@ import sys
 import json
 import pytest
 from flask_testing import TestCase
-from src.app import app
-# sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
+from app import app
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 
 class AppTestCase(TestCase):
     """
