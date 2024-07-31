@@ -18,7 +18,8 @@ app = Flask(__name__)
 swagger = Swagger(app)
 
 # Load the trained model
-MODEL_PATH = '../models/model.pkl'
+MODEL_PATH = os.path.join(os.path.dirname(__file__), '../models/model.pkl')
+# MODEL_PATH = '../models/model.pkl'
 if os.path.exists(MODEL_PATH):
     with open(MODEL_PATH, 'rb') as f:
         model = pickle.load(f)
