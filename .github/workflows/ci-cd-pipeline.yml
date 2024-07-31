@@ -33,9 +33,6 @@ jobs:
       run: |
         source bits_env/bin/activate
         pylint --disable=C0114,C0115,C0116 --exit-zero scrapegraphai//.py scrapegraphai/.py examples//.py tests/**/.py
-        
-    - name: Set PYTHONPATH
-      run: echo "PYTHONPATH=$(pwd)/src" >> $GITHUB_ENV
 
     - name: Run Tests
       run: |
