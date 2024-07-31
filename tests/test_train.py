@@ -23,8 +23,8 @@ from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
-from data_processing import load_data, scale_features
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
+from data_processing import load_data, scale_features
 
 def test_train_and_evaluate():
     # Load the saved model

@@ -17,8 +17,13 @@ app = Flask(__name__)
 # Initialize Swagger
 swagger = Swagger(app)
 
-# Load the trained model
-MODEL_PATH = os.path.join(os.path.dirname(__file__), '../models/model.pkl')
+# Get the absolute path to the models directory
+MODELS_DIR = os.path.join(os.path.dirname(__file__), '../models')
+
+# Define the paths to your model and scaler files
+MODEL_PATH = os.path.join(MODELS_DIR, 'model.pkl')
+SCALER_PATH = os.path.join(MODELS_DIR, 'scaler.pkl')
+
 # MODEL_PATH = '../models/model.pkl'
 if os.path.exists(MODEL_PATH):
     with open(MODEL_PATH, 'rb') as f:
@@ -26,9 +31,16 @@ if os.path.exists(MODEL_PATH):
 else:
     raise FileNotFoundError(f'Model file not found: {MODEL_PATH}')
 
-# Initialize scaler and PCA (assuming you saved the scaler and PCA during training)
-with open('../models/scaler.pkl', 'rb') as f:
-    scaler = pickle.load(f)
+# Load the scaler
+if os.path.exists(SCALER_PATH):
+    with open(SCALER_PATH, 'rb') as f:
+        scaler = pickle.load(f)
+else:
+    raise FileNotFoundError(f'Scaler file not found: {SCALER_PATH}')
+
+# # Initialize scaler and PCA (assuming you saved the scaler and PCA during training)
+# with open(MODEL_PATH, 'rb') as f:
+#     scaler = pickle.load(f)
 
 def feature_engineering(data):
     """Apply feature engineering steps to the data."""

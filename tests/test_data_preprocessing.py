@@ -16,8 +16,8 @@ import pytest
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import StandardScaler
-from data_processing import load_data, split_data, scale_features
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
+from data_processing import load_data, split_data, scale_features
 
 @pytest.fixture(scope="module")
 def sample_data():
