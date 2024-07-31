@@ -35,8 +35,11 @@ def sample_data():
         'Outcome': [1, 0, 1, 0, 1]
     }
     df = pd.DataFrame(data)
-    df.to_csv('../data/sample_diabetes.csv', index=False)
-    return '../data/sample_diabetes.csv'
+    data_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../data'))
+    sample_data_path = os.path.join(data_dir, 'sample_diabetes.csv')
+    df.to_csv(sample_data_path, index=False)
+
+    return sample_data_path
 
 def test_load_data(sample_data):
     """Test the load_data function.
