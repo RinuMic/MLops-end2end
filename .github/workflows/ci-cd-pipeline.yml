@@ -10,19 +10,49 @@ on:
       - main
 
 jobs:
-  docker:
+  lint:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Log in to GitHub Container Registry
-      run:  echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'
 
-    - name: Build Docker Image
-      run:  docker build -t ghcr.io/${{ github.repository_owner | toLowerCase }}/pima-indians-mlops:latest .
+    - name: Install dependencies
+      run: |
+        python -m venv bits_env
+        source bits_env/bin/activate
+        pip install -r requirements.txt
 
-    - name: Push Docker Image
-      run:  docker push ghcr.io/${{ github.repository_owner | toLowerCase }}/pima-indians-mlops:latest
+    - name: Lint code
+      run: |
+        source bits_env/bin/activate
+        pylint --disable=C0114,C0115,C0116 --exit-zero scrapegraphai/*.py examples/*.py tests/**/*.py
 
+  test:
+    runs-on: ubuntu-latest
+    needs: lint
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'
+
+    - name: Install dependencies
+      run: |
+        python -m venv bits_env
+        source bits_env/bin/activate
+        pip install -r requirements.txt
+
+    - name: Run Tests
+      run: |
+        source bits_env/bin/activate
+        pytest tests/
