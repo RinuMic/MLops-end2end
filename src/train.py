@@ -4,6 +4,7 @@ Module docstring for train_mlflow.py.
 # src/train.py
 
 import os
+import sys
 import pickle
 import mlflow
 import mlflow.sklearn
@@ -15,9 +16,12 @@ from sklearn.model_selection import train_test_split
 from data_processing import load_data, scale_features
 from model import create_model
 
+DATA_PATH= os.path.join(os.path.dirname(__file__), '../data/diabetes.csv')
+# MODELS_PATH = os.path.join(os.path.dirname(__file__), '../models')
+
 def objective(trial):
     # Load and split the data
-    x, y = load_data('../data/diabetes.csv')
+    x, y = load_data(DATA_PATH)
     x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
     # Scale features
     x_train_scaled, x_test_scaled = scale_features(x_train, x_test)
@@ -55,7 +59,7 @@ def train_and_evaluate():
         mlflow.log_params(trial.params)
         mlflow.log_metric("best_accuracy", trial.value)
         # Retrain the best model on the entire dataset
-        x, y = load_data('../data/diabetes.csv')
+        x, y = load_data(DATA_PATH)
         x_scaled, _, scaler = scale_features(x, x, return_scaler=True)  # Scale features on the entire dataset
         model = create_model(trial)
         model.fit(x_scaled, y)
