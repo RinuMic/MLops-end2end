@@ -30,7 +30,7 @@ jobs:
     - name: Pull data from DVC
       run: |
         source bits_env/bin/activate
-        dvc pull
+        dvc pull --force
 
     - name: Print working directory
       run: pwd
