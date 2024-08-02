@@ -1,0 +1,15 @@
+artifact_uri: file:///D:/BITS-MTECH-AIML-23-25/SEM3/MLOPS/ASSIGNMENT/MLops-end2end/mlruns/0/599c15f6d5ed4bd294a4720705acda2f/artifacts
+end_time: 1722585931193
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 599c15f6d5ed4bd294a4720705acda2f
+run_name: resilient-fly-715
+run_uuid: 599c15f6d5ed4bd294a4720705acda2f
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1722585931122
+status: 4
+tags: []
+user_id: rinum

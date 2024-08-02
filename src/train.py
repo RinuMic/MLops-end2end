@@ -14,12 +14,10 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 from sklearn.model_selection import train_test_split
 from data_processing import load_data, scale_features
 from model import create_model
-# Set the tracking URI to a local directory
-mlflow.set_tracking_uri("http://localhost:5000")
 
 def objective(trial):
     # Load and split the data
-    x, y = load_data('data/diabetes.csv')
+    x, y = load_data('./data/diabetes.csv')
     x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
     # Scale features
     x_train_scaled, x_test_scaled = scale_features(x_train, x_test)
@@ -57,7 +55,7 @@ def train_and_evaluate():
         mlflow.log_params(trial.params)
         mlflow.log_metric("best_accuracy", trial.value)
         # Retrain the best model on the entire dataset
-        x, y = load_data('data/diabetes.csv')
+        x, y = load_data('./data/diabetes.csv')
         x_scaled, _, scaler = scale_features(x, x, return_scaler=True)  # Scale features on the entire dataset
         model = create_model(trial)
         model.fit(x_scaled, y)
