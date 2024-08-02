@@ -9,10 +9,8 @@ on:
       - main
 
 jobs:
-
   train:
     runs-on: ubuntu-latest
-    needs: test
 
     steps:
     - name: Checkout code
@@ -32,5 +30,6 @@ jobs:
     - name: Train ML Model
       run: |
         source bits_env/bin/activate
-        python src/train.py  # Adjust this command based on your training script
-      
+        cd src
+        python train.py  # Adjust this command based on your training script
+        
