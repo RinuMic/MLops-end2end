@@ -1,0 +1,2 @@
+[remote "local"]
+  url = ../data/diabetes.csv
