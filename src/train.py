@@ -17,7 +17,7 @@ from model import create_model
 
 def objective(trial):
     # Load and split the data
-    x, y = load_data('./data/diabetes.csv')
+    x, y = load_data('../data/diabetes.csv')
     x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
     # Scale features
     x_train_scaled, x_test_scaled = scale_features(x_train, x_test)
@@ -55,19 +55,19 @@ def train_and_evaluate():
         mlflow.log_params(trial.params)
         mlflow.log_metric("best_accuracy", trial.value)
         # Retrain the best model on the entire dataset
-        x, y = load_data('./data/diabetes.csv')
+        x, y = load_data('../data/diabetes.csv')
         x_scaled, _, scaler = scale_features(x, x, return_scaler=True)  # Scale features on the entire dataset
         model = create_model(trial)
         model.fit(x_scaled, y)
         # Save the scaler and model
         os.makedirs('models', exist_ok=True)
         # Save the scaler
-        scaler_path = 'models/scaler.pkl'
+        scaler_path = '../models/scaler.pkl'
         with open(scaler_path, 'wb') as f:
             pickle.dump(scaler, f)
         mlflow.log_artifact(scaler_path, "artifacts")
         # Save the trained model
-        model_path = 'models/model.pkl'
+        model_path = '../models/model.pkl'
         with open(model_path, 'wb') as f:
             pickle.dump(model, f)
         mlflow.log_artifact(model_path, "artifacts")
@@ -85,7 +85,7 @@ def train_and_evaluate():
         plt.title('Confusion Matrix')
         plt.tight_layout()
         # Save confusion matrix plot
-        cm_path = 'models/confusion_matrix.png'
+        cm_path = '../models/confusion_matrix.png'
         plt.savefig(cm_path)
         mlflow.log_artifact(cm_path, "artifacts")
 

@@ -29,9 +29,10 @@ jobs:
 
     - name: Print working directory
       run: pwd
-      
+
     - name: Train ML Model
       run: |
         source bits_env/bin/activate
-        python src/train.py  # Adjust this command based on your training script
+        cd /home/runner/work/MLops-end2end/MLops-end2end
+        python src/train.py
         
