@@ -30,9 +30,10 @@ jobs:
     - name: Print working directory
       run: pwd
 
-    - name: Verify Data File
+    - name: Pull data from DVC
       run: |
-        if [ -f "../data/diabetes.csv" ]; then echo "File exists"; else echo "File does not exist"; fi
+        source bits_env/bin/activate
+        dvc pull
 
     - name: Train ML Model
       run: |
