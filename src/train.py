@@ -16,7 +16,11 @@ from sklearn.model_selection import train_test_split
 from data_processing import load_data, scale_features
 from model import create_model
 
-DATA_PATH= os.path.join(os.path.dirname(__file__), '../data/diabetes.csv')
+# Get the current working directory
+current_dir = os.getcwd()
+
+# Construct the path to the data file
+DATA_PATH = os.path.join(current_dir, 'data', 'diabetes.csv')
 # MODELS_PATH = os.path.join(os.path.dirname(__file__), '../models')
 
 def objective(trial):
